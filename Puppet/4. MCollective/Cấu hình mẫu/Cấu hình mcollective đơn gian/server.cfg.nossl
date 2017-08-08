@@ -1,0 +1,36 @@
+classesfile = /var/lib/puppet/state/classes.txt
+####
+collectives = mcollective
+connector = activemq		#chỉ định middlerware dạng activemq
+####
+daemonize = 1
+direct_addressing = 1
+factsource = yaml
+identity = puppetmaster17.puppet.local	# định danh node trong mcollective
+libdir = /opt/puppetlabs/mcollective	# các plugin agent sẽ nằm tại đây
+####
+logfile = /var/log/mcollective.log		# chỉ định log
+loglevel = info
+####
+main_collective = mcollective
+plugin.actionpolicy.allow_unconfigured = 1
+plugin.activemq.base64 = yes
+plugin.activemq.heartbeat_interval = 30
+####
+plugin.activemq.pool.size = 1	# Khởi tạo mcolletive kết nối
+plugin.activemq.pool.1.host = clienttest.puppet.local # Kết nối middleware server
+plugin.activemq.pool.1.port = 61613	#port kết nối middleware
+plugin.activemq.pool.1.user = mcollective #user trùng user config trong activemq.xml
+plugin.activemq.pool.1.password = marionette
+####
+plugin.activemq.randomize = true
+#### Cấu hình plugin.psk phải đồng bộ trên tất cả server thì client mới có thể nhận diện đc node
+securityprovider = psk
+plugin.psk = changemeplease
+####
+plugin.rpcaudit.logfile = /var/log/mcollective-audit.log
+plugin.yaml = /etc/puppetlabs/mcollective/facts.yaml
+rpcaudit = 1
+rpcauditprovider = logfile
+rpcauthorization = 1
+rpcauthprovider = action_policy

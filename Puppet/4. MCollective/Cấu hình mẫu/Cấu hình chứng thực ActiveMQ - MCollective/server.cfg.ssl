@@ -1,0 +1,39 @@
+### Cấu hình server.cfg khi sử dụng ssl, tls ###
+
+main_collective = mcollective
+collectives = mcollective
+
+libdir = /opt/puppetlabs/mcollective/plugins
+
+# consult the "classic" libdirs too
+libdir = /usr/share/mcollective/plugins
+libdir = /usr/libexec/mcollective
+
+logfile = /var/log/puppetlabs/mcollective/mcollective.log
+loglevel = info
+daemonize = 1
+
+# Plugins
+securityprovider = psk
+plugin.psk = unset
+
+connector = activemq
+plugin.activemq.pool.size = 1
+plugin.activemq.pool.1.host = master.puppet.local
+plugin.activemq.pool.1.port = 61614
+plugin.activemq.pool.1.user = mcollective
+plugin.activemq.pool.1.password = marionette
+
+#### Phần quan trọng khi cấu hình ssl ####
+plugin.activemq.pool.1.ssl = 1  # Bằng 1 khi cấu hình ssl, tls cho mcollective
+plugin.activemq.pool.1.ssl.ca = /etc/puppetlabs/puppet/ssl/certs/ca.pem # Đây là ca.pem khi sử dụng để tạo truststore.jks
+plugin.activemq.pool.1.ssl.cert = /etc/puppetlabs/puppet/ssl/certs/master.puppet.local.pem  # Đây phải là chứng chỉ của node triển khai ActiveMQ
+plugin.activemq.pool.1.ssl.key = /etc/puppetlabs/puppet/ssl/private_keys/master.puppet.local.pem  # Đây phải là chứng chỉ của node triển khai ActiveMQ
+plugin.activemq.pool.1.ssl.fallback = 0
+plugin.activemq.stomp_1_0_fallback = 0
+plugin.activemq.heartbeat_interval = 30
+plugin.activemq.max_hbread_fails = 2
+plugin.activemq.max_hbrlck_fails = 0
+# Facts
+factsource = yaml
+plugin.yaml = /etc/puppetlabs/mcollective/facts.yaml
